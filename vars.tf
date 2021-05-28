@@ -48,7 +48,7 @@ variable "backup_retention_days" {
 variable "admin_login" {
   type        = string
   description = "Admin login"
-  default     = "mysqladmin"
+  default     = "psql"
 }
 
 variable "admin_password" {

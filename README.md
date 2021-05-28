@@ -89,7 +89,7 @@ Description: Admin login
 
 Type: `string`
 
-Default: `"mysqladmin"`
+Default: `"psql"`
 
 ### allowed\_ips
 
