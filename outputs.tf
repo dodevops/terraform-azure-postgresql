@@ -1,14 +1,18 @@
-output "resource_group" {
-  description = "The name of the generated resource group"
-  value       = azurerm_resource_group.azure-resource-group.name
+output "server_fqdn" {
+  description = "FQDN of the database service"
+  value       = azurerm_postgresql_server.server.fqdn
 }
 
-output "location" {
-  description = "The location input variable (can be used for dependency resolution)"
-  value       = var.location
+output "admin_login" {
+  value = var.admin_login
 }
 
-output "ppg_id" {
-  description = "The ID of the generated proximity placement group"
-  value       = azurerm_proximity_placement_group.ppg.id
+output "admin_password" {
+  value = var.admin_password
+}
+
+output "databases" {
+  value = length(azurerm_postgresql_database.db) > 0 ? {
+  for index, suffix in var.database_suffixes : suffix => azurerm_postgresql_database.db[suffix].name
+  } : {}
 }
