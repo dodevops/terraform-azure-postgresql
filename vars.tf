@@ -23,6 +23,19 @@ variable "database_suffixes" {
   description = "List of suffixes for databases to be created"
 }
 
+variable "charset" {
+  type        = string
+  description = "Charset for the databases, which needs to be a valid PostgreSQL charset"
+}
+
+variable "collation" {
+  type        = string
+  description = <<EOF
+    Collation for the databases, which needs to be a valid PostgreSQL collation. Note that Microsoft uses
+    different notation - f.e. en-US instead of en_US
+  EOF
+}
+
 variable "database_version" {
   type        = string
   description = "Database version to use"
@@ -43,6 +56,15 @@ variable "backup_retention_days" {
     condition     = var.backup_retention_days >= 7 && var.backup_retention_days <= 35
     error_message = "Backup retention days has to be between 7 and 35 including."
   }
+}
+
+variable "geo_redundant_backup_enabled" {
+  type        = bool
+  description = <<EOF
+    Turn Geo-redundant server backups on/off. This allows you to choose between locally redundant or geo-redundant backup storage in the
+    General Purpose and Memory Optimized tiers. This is not support for the Basic tier
+  EOF
+  default     = false
 }
 
 variable "admin_login" {
@@ -75,15 +97,15 @@ variable "public_access" {
 }
 
 variable "allowed_ips" {
-  description = <<EOF
-    A hash of permissions to access the database server by ip. The hash key is the name suffix and each value
-    has a start and an end value.
-  EOF
   type = map(object({
     start = string,
     end   = string
   }))
-  default = {}
+  description = <<EOF
+    A hash of permissions to access the database server by ip. The hash key is the name suffix and each value
+    has a start and an end value. If no allowed_ips is given, the access is public!
+  EOF
+  default     = {}
 }
 
 variable "subnets" {
@@ -94,11 +116,10 @@ variable "subnets" {
 
 variable "autogrow" {
   type        = bool
-  default     = true
   description = <<EOT
     Enable/Disable auto-growing of the storage. Storage auto-grow prevents your server from running out of storage
     and becoming read-only. If storage auto grow is enabled, the storage automatically grows without impacting the
     workload
     EOT
+  default     = true
 }
-

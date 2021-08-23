@@ -14,3 +14,12 @@ resource "azurerm_postgresql_virtual_network_rule" "virtualnetworks" {
   server_name         = azurerm_postgresql_server.server.name
   subnet_id           = each.value
 }
+
+resource "azurerm_postgresql_firewall_rule" "public" {
+  count               = length(var.allowed_ips) > 0 ? 0 : 1
+  start_ip_address    = "0.0.0.0"
+  end_ip_address      = "255.255.255.255"
+  name                = "${lower(var.project)}${lower(var.stage)}dbfwpublic"
+  resource_group_name = var.resource_group
+  server_name         = azurerm_postgresql_server.server.name
+}

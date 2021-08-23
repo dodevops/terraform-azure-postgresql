@@ -36,6 +36,7 @@ The following resources are used by this module:
 
 - [azurerm_postgresql_database.db](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_database) (resource)
 - [azurerm_postgresql_firewall_rule.firewall](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_firewall_rule) (resource)
+- [azurerm_postgresql_firewall_rule.public](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_firewall_rule) (resource)
 - [azurerm_postgresql_server.server](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_server) (resource)
 - [azurerm_postgresql_virtual_network_rule.virtualnetworks](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_virtual_network_rule) (resource)
 
@@ -46,6 +47,19 @@ The following input variables are required:
 ### admin\_password
 
 Description: Admin password
+
+Type: `string`
+
+### charset
+
+Description: Charset for the databases, which needs to be a valid PostgreSQL charset
+
+Type: `string`
+
+### collation
+
+Description:     Collation for the databases, which needs to be a valid PostgreSQL collation. Note that Microsoft uses  
+    different notation - f.e. en-US instead of en\_US
 
 Type: `string`
 
@@ -94,7 +108,7 @@ Default: `"psql"`
 ### allowed\_ips
 
 Description:     A hash of permissions to access the database server by ip. The hash key is the name suffix and each value  
-    has a start and an end value.
+    has a start and an end value. If no allowed\_ips is given, the access is public!
 
 Type:
 
@@ -149,6 +163,15 @@ Type: `string`
 
 Default: `"11"`
 
+### geo\_redundant\_backup\_enabled
+
+Description:     Turn Geo-redundant server backups on/off. This allows you to choose between locally redundant or geo-redundant backup storage in the  
+    General Purpose and Memory Optimized tiers. This is not support for the Basic tier
+
+Type: `bool`
+
+Default: `false`
+
 ### public\_access
 
 Description: Wether to allow public access to the database server
@@ -177,17 +200,21 @@ Default: `""`
 
 The following outputs are exported:
 
-### location
+### admin\_login
 
-Description: The location input variable (can be used for dependency resolution)
+Description: n/a
 
-### ppg\_id
+### admin\_password
 
-Description: The ID of the generated proximity placement group
+Description: n/a
 
-### resource\_group
+### databases
 
-Description: The name of the generated resource group
+Description: n/a
+
+### server\_fqdn
+
+Description: FQDN of the database service
 <!-- END_TF_DOCS -->
 
 ## Development
