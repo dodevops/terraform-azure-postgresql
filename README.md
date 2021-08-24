@@ -36,9 +36,9 @@ The following resources are used by this module:
 
 - [azurerm_postgresql_database.db](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_database) (resource)
 - [azurerm_postgresql_firewall_rule.firewall](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_firewall_rule) (resource)
-- [azurerm_postgresql_firewall_rule.public](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_firewall_rule) (resource)
 - [azurerm_postgresql_server.server](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_server) (resource)
 - [azurerm_postgresql_virtual_network_rule.virtualnetworks](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_virtual_network_rule) (resource)
+- [azurerm_private_endpoint.postgresql-private-endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) (resource)
 
 ## Required Inputs
 
@@ -108,7 +108,8 @@ Default: `"psql"`
 ### allowed\_ips
 
 Description:     A hash of permissions to access the database server by ip. The hash key is the name suffix and each value  
-    has a start and an end value. If no allowed\_ips is given, the access is public!
+    has a start and an end value. For public access set start\_ip\_address to 0.0.0.0 and end\_ip\_address to  
+    255.255.255.255. This variable is not used if public\_access = false.
 
 Type:
 
@@ -174,7 +175,10 @@ Default: `false`
 
 ### public\_access
 
-Description: Wether to allow public access to the database server
+Description:     Wether to allow public access to the database server. True will create firewall rules for allowed\_ips and for subnets. False will  
+    create a private endpoint in each given subnet (allowed\_ips will not be used then) - you have to set  
+    enforce\_private\_link\_endpoint\_network\_policies = true on your subnet in this case (see  
+    https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet#enforce_private_link_endpoint_network_policies).
 
 Type: `bool`
 
