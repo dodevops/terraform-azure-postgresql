@@ -13,6 +13,6 @@ output "admin_password" {
 
 output "databases" {
   value = length(azurerm_postgresql_database.db) > 0 ? {
-  for index, suffix in var.database_suffixes : suffix => azurerm_postgresql_database.db[suffix].name
+    for index, suffix in var.database_suffixes : suffix => azurerm_postgresql_database.db[suffix].name
   } : {}
 }
