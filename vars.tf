@@ -44,7 +44,7 @@ variable "collation" {
   type        = string
   description = <<EOF
     Collation for the databases, which needs to be a valid PostgreSQL collation. Note that Microsoft uses
-    different notation - f.e. en-US instead of en_US
+    different notation - f.e. en-US instead of en_US for the non-flexible server
   EOF
 }
 variable "backup_retention_days" {
@@ -87,6 +87,12 @@ variable "database_storage" {
   type        = string
   description = "Required database storage (in MB)"
   default     = "5120"
+}
+
+variable "database_flexible" {
+  type        = bool
+  description = "Whethert to use Azure's flexible database service"
+  default     = false
 }
 
 variable "public_access" {

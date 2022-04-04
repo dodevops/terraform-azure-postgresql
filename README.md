@@ -36,6 +36,10 @@ The following resources are used by this module:
 
 - [azurerm_postgresql_database.db](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_database) (resource)
 - [azurerm_postgresql_firewall_rule.firewall](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_firewall_rule) (resource)
+- [azurerm_postgresql_flexible_server.server](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server) (resource)
+- [azurerm_postgresql_flexible_server_configuration.pgbouncer](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server_configuration) (resource)
+- [azurerm_postgresql_flexible_server_database.db](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server_database) (resource)
+- [azurerm_postgresql_flexible_server_firewall_rule.firewall](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server_firewall_rule) (resource)
 - [azurerm_postgresql_server.server](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_server) (resource)
 - [azurerm_postgresql_virtual_network_rule.virtualnetworks](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_virtual_network_rule) (resource)
 - [azurerm_private_endpoint.postgresql-private-endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) (resource)
@@ -59,7 +63,7 @@ Type: `string`
 ### collation
 
 Description:     Collation for the databases, which needs to be a valid PostgreSQL collation. Note that Microsoft uses  
-    different notation - f.e. en-US instead of en\_US
+    different notation - f.e. en-US instead of en\_US for the non-flexible server
 
 Type: `string`
 
@@ -139,6 +143,14 @@ Description: Number of days to keep backups
 Type: `number`
 
 Default: `7`
+
+### database\_flexible
+
+Description: Whethert to use Azure's flexible database service
+
+Type: `bool`
+
+Default: `false`
 
 ### database\_host\_sku
 
