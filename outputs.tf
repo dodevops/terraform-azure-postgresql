@@ -3,6 +3,11 @@ output "server_fqdn" {
   value       = local.server_fqdn
 }
 
+output "server_id" {
+  description = "ID of the database server"
+  value       = var.database_flexible ? azurerm_postgresql_flexible_server.server.0.id : azurerm_postgresql_server.server.0.id
+}
+
 output "admin_login" {
   value = var.admin_login
 }

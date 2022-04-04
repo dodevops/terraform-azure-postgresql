@@ -231,6 +231,10 @@ Description: n/a
 ### server\_fqdn
 
 Description: FQDN of the database service
+
+### server\_id
+
+Description: ID of the database server
 <!-- END_TF_DOCS -->
 
 ## Development
