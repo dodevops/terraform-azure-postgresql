@@ -34,9 +34,11 @@ No modules.
 
 The following resources are used by this module:
 
+- [azurerm_postgresql_configuration.params](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_configuration) (resource)
 - [azurerm_postgresql_database.db](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_database) (resource)
 - [azurerm_postgresql_firewall_rule.firewall](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_firewall_rule) (resource)
 - [azurerm_postgresql_flexible_server.server](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server) (resource)
+- [azurerm_postgresql_flexible_server_configuration.params](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server_configuration) (resource)
 - [azurerm_postgresql_flexible_server_configuration.pgbouncer](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server_configuration) (resource)
 - [azurerm_postgresql_flexible_server_database.db](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server_database) (resource)
 - [azurerm_postgresql_flexible_server_firewall_rule.firewall](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server_firewall_rule) (resource)
@@ -62,8 +64,9 @@ Type: `string`
 
 ### collation
 
-Description:     Collation for the databases, which needs to be a valid PostgreSQL collation. Note that Microsoft uses  
-    different notation - f.e. en-US instead of en\_US for the non-flexible server
+Description:     Collation for the databases, which needs to be a valid PostgreSQL collation. Note that *for single server* Microsoft  
+    uses different notation - f.e. en-US instead of en\_US. *For flexible server*, PostgreSQL standard collations are  
+    used.
 
 Type: `string`
 
@@ -130,7 +133,7 @@ Default: `{}`
 
 Description:     Enable/Disable auto-growing of the storage. Storage auto-grow prevents your server from running out of storage  
     and becoming read-only. If storage auto grow is enabled, the storage automatically grows without impacting the  
-    workload
+    workload (only single server)
 
 Type: `bool`
 
@@ -146,7 +149,7 @@ Default: `7`
 
 ### database\_flexible
 
-Description: Whethert to use Azure's flexible database service
+Description: Whether to use Azure's flexible database service
 
 Type: `bool`
 
@@ -154,7 +157,8 @@ Default: `false`
 
 ### database\_host\_sku
 
-Description: SKU for the database server to use
+Description:     SKU for the database server to use. Single server uses values like GP\_Gen5\_2, flexible server uses Azure  
+    machine SKUs like GP\_Standard\_D2s\_v3
 
 Type: `string`
 
@@ -162,7 +166,8 @@ Default: `"GP_Gen5_2"`
 
 ### database\_storage
 
-Description: Required database storage (in MB)
+Description:     Required database storage (in MB) (flexible server has a defined set of storage sizes to select from.  
+    See https://docs.microsoft.com/de-de/azure/postgresql/flexible-server/concepts-compute-storage#storage
 
 Type: `string`
 
@@ -178,19 +183,29 @@ Default: `"11"`
 
 ### geo\_redundant\_backup\_enabled
 
-Description:     Turn Geo-redundant server backups on/off. This allows you to choose between locally redundant or geo-redundant backup storage in the  
-    General Purpose and Memory Optimized tiers. This is not support for the Basic tier
+Description:     Turn Geo-redundant server backups on/off. This allows you to choose between locally redundant or geo-redundant  
+    backup storage in the General Purpose and Memory Optimized tiers. This is not support for the Basic tier
+    (only single server)
 
 Type: `bool`
 
 Default: `false`
 
+### params
+
+Description: A map of server parameters to set
+
+Type: `set(string)`
+
+Default: `{}`
+
 ### public\_access
 
-Description:     Wether to allow public access to the database server. True will create firewall rules for allowed\_ips and for subnets. False will  
-    create a private endpoint in each given subnet (allowed\_ips will not be used then) - you have to set  
-    enforce\_private\_link\_endpoint\_network\_policies = true on your subnet in this case (see  
+Description:     Wether to allow public access to the database server. True will create firewall rules for allowed\_ips and for  
+    subnets. False will create a private endpoint in each given subnet (allowed\_ips will not be used then) - you have  
+    to set `enforce_private_link_endpoint_network_policies = true` on your subnet in this case (see  
     https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet#enforce_private_link_endpoint_network_policies).
+    (false currently not supported for flexible server)
 
 Type: `bool`
 
@@ -198,7 +213,7 @@ Default: `false`
 
 ### subnets
 
-Description: Maps of prefix => subnet id that has access to the server
+Description: Maps of prefix => subnet id that has access to the server  (only single server)
 
 Type: `map(string)`
 

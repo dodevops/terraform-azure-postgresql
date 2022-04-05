@@ -43,8 +43,9 @@ variable "charset" {
 variable "collation" {
   type        = string
   description = <<EOF
-    Collation for the databases, which needs to be a valid PostgreSQL collation. Note that Microsoft uses
-    different notation - f.e. en-US instead of en_US for the non-flexible server
+    Collation for the databases, which needs to be a valid PostgreSQL collation. Note that *for single server* Microsoft
+    uses different notation - f.e. en-US instead of en_US. *For flexible server*, PostgreSQL standard collations are
+    used.
   EOF
 }
 variable "backup_retention_days" {
@@ -60,8 +61,9 @@ variable "backup_retention_days" {
 variable "geo_redundant_backup_enabled" {
   type        = bool
   description = <<EOF
-    Turn Geo-redundant server backups on/off. This allows you to choose between locally redundant or geo-redundant backup storage in the
-    General Purpose and Memory Optimized tiers. This is not support for the Basic tier
+    Turn Geo-redundant server backups on/off. This allows you to choose between locally redundant or geo-redundant
+    backup storage in the General Purpose and Memory Optimized tiers. This is not support for the Basic tier
+    (only single server)
   EOF
   default     = false
 }
@@ -79,29 +81,36 @@ variable "admin_password" {
 
 variable "database_host_sku" {
   type        = string
-  description = "SKU for the database server to use"
+  description = <<EOF
+    SKU for the database server to use. Single server uses values like GP_Gen5_2, flexible server uses Azure
+    machine SKUs like GP_Standard_D2s_v3
+  EOF
   default     = "GP_Gen5_2"
 }
 
 variable "database_storage" {
   type        = string
-  description = "Required database storage (in MB)"
+  description = <<EOF
+    Required database storage (in MB) (flexible server has a defined set of storage sizes to select from.
+    See https://docs.microsoft.com/de-de/azure/postgresql/flexible-server/concepts-compute-storage#storage
+  EOF
   default     = "5120"
 }
 
 variable "database_flexible" {
   type        = bool
-  description = "Whethert to use Azure's flexible database service"
+  description = "Whether to use Azure's flexible database service"
   default     = false
 }
 
 variable "public_access" {
   type        = bool
   description = <<EOF
-    Wether to allow public access to the database server. True will create firewall rules for allowed_ips and for subnets. False will
-    create a private endpoint in each given subnet (allowed_ips will not be used then) - you have to set
-    enforce_private_link_endpoint_network_policies = true on your subnet in this case (see
+    Wether to allow public access to the database server. True will create firewall rules for allowed_ips and for
+    subnets. False will create a private endpoint in each given subnet (allowed_ips will not be used then) - you have
+    to set `enforce_private_link_endpoint_network_policies = true` on your subnet in this case (see
     https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet#enforce_private_link_endpoint_network_policies).
+    (false currently not supported for flexible server)
   EOF
   default     = false
 }
@@ -121,7 +130,7 @@ variable "allowed_ips" {
 
 variable "subnets" {
   type        = map(string)
-  description = "Maps of prefix => subnet id that has access to the server"
+  description = "Maps of prefix => subnet id that has access to the server  (only single server)"
   default     = {}
 }
 
@@ -130,7 +139,13 @@ variable "autogrow" {
   description = <<EOT
     Enable/Disable auto-growing of the storage. Storage auto-grow prevents your server from running out of storage
     and becoming read-only. If storage auto grow is enabled, the storage automatically grows without impacting the
-    workload
+    workload (only single server)
     EOT
   default     = true
+}
+
+variable "params" {
+  type        = set(string)
+  description = "A map of server parameters to set"
+  default     = {}
 }
