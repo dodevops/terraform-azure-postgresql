@@ -145,7 +145,7 @@ variable "autogrow" {
 }
 
 variable "params" {
-  type        = set(string)
+  type        = map(string)
   description = "A map of server parameters to set"
   default     = {}
 }
