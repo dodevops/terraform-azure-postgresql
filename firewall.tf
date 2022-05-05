@@ -24,16 +24,16 @@ resource "azurerm_postgresql_virtual_network_rule" "virtualnetworks" {
 }
 
 resource "azurerm_private_endpoint" "postgresql-private-endpoint" {
-  for_each            = !var.database_flexible && var.public_access == true ? var.subnets : {}
-  name                = "${each.value}-postgresql-${azurerm_postgresql_server.server.0.id}-endpoint"
+  for_each            = !var.database_flexible && var.public_access == false ? var.subnets : {}
+  name                = "${each.key}${azurerm_postgresql_server.server.0.name}"
   location            = var.location
   resource_group_name = var.resource_group
   subnet_id           = each.value
 
   private_service_connection {
-    name                           = "${each.value}-postgresql-${azurerm_postgresql_server.server.0.id}-privateserviceconnection"
+    name                           = "${each.key}${azurerm_postgresql_server.server.0.name}"
     private_connection_resource_id = azurerm_postgresql_server.server.0.id
-    subresource_names              = ["mysqlServer"]
+    subresource_names              = ["postgresqlServer"]
     is_manual_connection           = false
   }
 }
