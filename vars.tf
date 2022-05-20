@@ -149,3 +149,8 @@ variable "params" {
   description = "A map of server parameters to set"
   default     = {}
 }
+
+variable "availability_zone" {
+  default     = 1
+  description = "The availability zone the Flexible Server should be placed in (only flexible server)"
+}

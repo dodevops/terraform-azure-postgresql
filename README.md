@@ -139,6 +139,14 @@ Type: `bool`
 
 Default: `true`
 
+### availability\_zone
+
+Description: The availability zone the Flexible Server should be placed in (only flexible server)
+
+Type: `number`
+
+Default: `1`
+
 ### backup\_retention\_days
 
 Description: Number of days to keep backups
@@ -195,7 +203,7 @@ Default: `false`
 
 Description: A map of server parameters to set
 
-Type: `set(string)`
+Type: `map(string)`
 
 Default: `{}`
 
