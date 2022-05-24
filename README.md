@@ -34,6 +34,12 @@ No modules.
 
 The following resources are used by this module:
 
+- [azurerm_postgresql_configuration.connection-throttling-flexible](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_configuration) (resource)
+- [azurerm_postgresql_configuration.connection-throttling-normal](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_configuration) (resource)
+- [azurerm_postgresql_configuration.log-checkpoints-flexible](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_configuration) (resource)
+- [azurerm_postgresql_configuration.log-checkpoints-normal](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_configuration) (resource)
+- [azurerm_postgresql_configuration.log-connections-flexible](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_configuration) (resource)
+- [azurerm_postgresql_configuration.log-connections-normal](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_configuration) (resource)
 - [azurerm_postgresql_configuration.params](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_configuration) (resource)
 - [azurerm_postgresql_database.db](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_database) (resource)
 - [azurerm_postgresql_firewall_rule.firewall](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_firewall_rule) (resource)
