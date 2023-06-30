@@ -151,6 +151,7 @@ variable "params" {
 }
 
 variable "availability_zone" {
+  type        = number
   default     = 1
   description = "The availability zone the Flexible Server should be placed in (only flexible server)"
 }
