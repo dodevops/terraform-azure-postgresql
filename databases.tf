@@ -4,7 +4,7 @@ resource "azurerm_postgresql_database" "db" {
   collation           = var.collation
   name                = "${var.project}${var.stage}db${each.value}"
   resource_group_name = var.resource_group
-  server_name         = azurerm_postgresql_server.server.0.name
+  server_name         = azurerm_postgresql_server.server[0].name
 }
 
 resource "azurerm_postgresql_flexible_server_database" "db" {
@@ -12,5 +12,5 @@ resource "azurerm_postgresql_flexible_server_database" "db" {
   charset   = var.charset
   collation = var.collation
   name      = "${var.project}${var.stage}db${each.value}"
-  server_id = azurerm_postgresql_flexible_server.server.0.id
+  server_id = azurerm_postgresql_flexible_server.server[0].id
 }

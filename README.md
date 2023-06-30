@@ -18,13 +18,17 @@ module "azure-postgresql" {
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
-No requirements.
+The following requirements are needed by this module:
+
+- terraform (>=1.0.0)
+
+- azurerm (>=3.63.0)
 
 ## Providers
 
 The following providers are used by this module:
 
-- azurerm
+- azurerm (>=3.63.0)
 
 ## Modules
 
@@ -268,7 +272,6 @@ Description: ID of the database server
 
 ## Development
 
-Use [terraform-docs](https://terraform-docs.io/) to generate the API documentation by running
+Use [the terraform module tools](https://github.com/dodevops/terraform-module-tools) to check and generate the documentation by running
 
-    terraform fmt .
-    terraform-docs .
+    docker run -v "$PWD":/terraform ghcr.io/dodevops/terraform-module-tools:latest

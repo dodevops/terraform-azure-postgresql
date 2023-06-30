@@ -12,7 +12,7 @@ resource "azurerm_postgresql_flexible_server_firewall_rule" "firewall" {
   start_ip_address = each.value.start
   end_ip_address   = each.value.end
   name             = "${var.project}${var.stage}dbfw${each.key}"
-  server_id        = azurerm_postgresql_flexible_server.server.0.id
+  server_id        = azurerm_postgresql_flexible_server.server[0].id
 }
 
 resource "azurerm_postgresql_virtual_network_rule" "virtualnetworks" {
@@ -25,14 +25,14 @@ resource "azurerm_postgresql_virtual_network_rule" "virtualnetworks" {
 
 resource "azurerm_private_endpoint" "postgresql-private-endpoint" {
   for_each            = !var.database_flexible && var.public_access == false ? var.subnets : {}
-  name                = "${each.key}${azurerm_postgresql_server.server.0.name}"
+  name                = "${each.key}${azurerm_postgresql_server.server[0].name}"
   location            = var.location
   resource_group_name = var.resource_group
   subnet_id           = each.value
 
   private_service_connection {
-    name                           = "${each.key}${azurerm_postgresql_server.server.0.name}"
-    private_connection_resource_id = azurerm_postgresql_server.server.0.id
+    name                           = "${each.key}${azurerm_postgresql_server.server[0].name}"
+    private_connection_resource_id = azurerm_postgresql_server.server[0].id
     subresource_names              = ["postgresqlServer"]
     is_manual_connection           = false
   }
