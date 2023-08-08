@@ -46,27 +46,11 @@ resource "azurerm_postgresql_configuration" "log-connections-normal" {
   value               = "on"
 }
 
-resource "azurerm_postgresql_configuration" "log-connections-flexible" {
-  count               = var.database_flexible ? 1 : 0
-  name                = "log_connections"
-  resource_group_name = var.resource_group
-  server_name         = azurerm_postgresql_flexible_server.server[0].name
-  value               = "on"
-}
-
 resource "azurerm_postgresql_configuration" "connection-throttling-normal" {
   count               = var.database_flexible ? 0 : 1
   name                = "connection_throttling"
   resource_group_name = var.resource_group
   server_name         = azurerm_postgresql_server.server[0].name
-  value               = "on"
-}
-
-resource "azurerm_postgresql_configuration" "connection-throttling-flexible" {
-  count               = var.database_flexible ? 1 : 0
-  name                = "connection_throttling"
-  resource_group_name = var.resource_group
-  server_name         = azurerm_postgresql_flexible_server.server[0].name
   value               = "on"
 }
 
@@ -78,10 +62,9 @@ resource "azurerm_postgresql_configuration" "log-checkpoints-normal" {
   value               = "on"
 }
 
-resource "azurerm_postgresql_configuration" "log-checkpoints-flexible" {
-  count               = var.database_flexible ? 1 : 0
-  name                = "log_checkpoints"
-  resource_group_name = var.resource_group
-  server_name         = azurerm_postgresql_flexible_server.server[0].name
-  value               = "on"
+resource "azurerm_postgresql_flexible_server_configuration" "log-checkpoints" {
+  count     = var.database_flexible ? 1 : 0
+  name      = "log_checkpoints"
+  value     = "on"
+  server_id = azurerm_postgresql_flexible_server.server[0].id
 }

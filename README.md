@@ -38,16 +38,14 @@ No modules.
 
 The following resources are used by this module:
 
-- [azurerm_postgresql_configuration.connection-throttling-flexible](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_configuration) (resource)
 - [azurerm_postgresql_configuration.connection-throttling-normal](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_configuration) (resource)
-- [azurerm_postgresql_configuration.log-checkpoints-flexible](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_configuration) (resource)
 - [azurerm_postgresql_configuration.log-checkpoints-normal](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_configuration) (resource)
-- [azurerm_postgresql_configuration.log-connections-flexible](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_configuration) (resource)
 - [azurerm_postgresql_configuration.log-connections-normal](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_configuration) (resource)
 - [azurerm_postgresql_configuration.params](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_configuration) (resource)
 - [azurerm_postgresql_database.db](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_database) (resource)
 - [azurerm_postgresql_firewall_rule.firewall](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_firewall_rule) (resource)
 - [azurerm_postgresql_flexible_server.server](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server) (resource)
+- [azurerm_postgresql_flexible_server_configuration.log-checkpoints](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server_configuration) (resource)
 - [azurerm_postgresql_flexible_server_configuration.params](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server_configuration) (resource)
 - [azurerm_postgresql_flexible_server_configuration.pgbouncer](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server_configuration) (resource)
 - [azurerm_postgresql_flexible_server_database.db](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server_database) (resource)
@@ -68,15 +66,16 @@ Type: `string`
 
 ### charset
 
-Description: Charset for the databases, which needs to be a valid PostgreSQL charset
+Description: Charset for the databases, which needs to be a
+[valid PostgreSQL charset](https://www.postgresql.org/docs/current/multibyte.html).
 
 Type: `string`
 
 ### collation
 
-Description:     Collation for the databases, which needs to be a valid PostgreSQL collation. Note that *for single server* Microsoft  
-    uses different notation - f.e. en-US instead of en\_US. *For flexible server*, PostgreSQL standard collations are  
-    used.
+Description: Collation for the databases, which needs to be a
+[valid PostgreSQL collation](https://www.postgresql.org/docs/current/collation.html).
+*For single server* Microsoft uses different notation - f.e. en-US instead of en\_US
 
 Type: `string`
 
@@ -124,9 +123,13 @@ Default: `"psql"`
 
 ### allowed\_ips
 
-Description:     A hash of permissions to access the database server by ip. The hash key is the name suffix and each value  
-    has a start and an end value. For public access set start\_ip\_address to 0.0.0.0 and end\_ip\_address to  
-    255.255.255.255. This variable is not used if public\_access = false.
+Description: A hash of permissions to access the database server by ip. The hash key is the name suffix and each value  
+has a start and an end value.
+
+* For public access set start to 0.0.0.0 and end to 255.255.255.255.
+* For access from all Azure services set start and end to 0.0.0.0
+
+This variable is not used if public\_access = false.
 
 Type:
 
@@ -141,9 +144,9 @@ Default: `{}`
 
 ### autogrow
 
-Description:     Enable/Disable auto-growing of the storage. Storage auto-grow prevents your server from running out of storage  
-    and becoming read-only. If storage auto grow is enabled, the storage automatically grows without impacting the  
-    workload (only single server)
+Description: Enable/Disable auto-growing of the storage. Storage auto-grow prevents your server from running out of storage  
+and becoming read-only. If storage auto grow is enabled, the storage automatically grows without impacting the  
+workload (only single server)
 
 Type: `bool`
 
@@ -175,8 +178,10 @@ Default: `false`
 
 ### database\_host\_sku
 
-Description:     SKU for the database server to use. Single server uses values like GP\_Gen5\_2, flexible server uses Azure  
-    machine SKUs like GP\_Standard\_D2s\_v3
+Description: SKU for the database server to use. Single server uses values like GP\_Gen5\_2, flexible server uses Azure  
+machine SKUs with a tier prefix like GP\_Standard\_D2s\_v38. See the
+[Microsoft documentation](https://learn.microsoft.com/en-us/azure/postgresql/flexible-server/concepts-compute-storage)  
+on what machine types are available for PostgreSQL.
 
 Type: `string`
 
@@ -184,8 +189,8 @@ Default: `"GP_Gen5_2"`
 
 ### database\_storage
 
-Description:     Required database storage (in MB) (flexible server has a defined set of storage sizes to select from.  
-    See https://docs.microsoft.com/de-de/azure/postgresql/flexible-server/concepts-compute-storage#storage
+Description: Required database storage (in MB) (flexible server has a defined set of storage sizes to select from.  
+See https://docs.microsoft.com/de-de/azure/postgresql/flexible-server/concepts-compute-storage#storage
 
 Type: `string`
 
@@ -201,9 +206,9 @@ Default: `"11"`
 
 ### geo\_redundant\_backup\_enabled
 
-Description:     Turn Geo-redundant server backups on/off. This allows you to choose between locally redundant or geo-redundant  
-    backup storage in the General Purpose and Memory Optimized tiers. This is not support for the Basic tier
-    (only single server)
+Description: Turn Geo-redundant server backups on/off. This allows you to choose between locally redundant or geo-redundant  
+backup storage in the General Purpose and Memory Optimized tiers. This is not supported for the Basic tier
+(only single server)
 
 Type: `bool`
 
@@ -219,11 +224,11 @@ Default: `{}`
 
 ### public\_access
 
-Description:     Wether to allow public access to the database server. True will create firewall rules for allowed\_ips and for  
-    subnets. False will create a private endpoint in each given subnet (allowed\_ips will not be used then) - you have  
-    to set `enforce_private_link_endpoint_network_policies = true` on your subnet in this case (see  
-    https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet#enforce_private_link_endpoint_network_policies).
-    (false currently not supported for flexible server)
+Description: Wether to allow public access to the database server. True will create firewall rules for allowed\_ips and for  
+subnets. False will create a private endpoint in each given subnet (allowed\_ips will not be used then) - you have  
+to set `enforce_private_link_endpoint_network_policies = true` on your subnet in this case (see  
+the [Terraform subnet resource documentation](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet#enforce_private_link_endpoint_network_policies)).
+(false currently not supported for flexible server)
 
 Type: `bool`
 
