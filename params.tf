@@ -1,5 +1,6 @@
+# Enable PGBouncer on flexible servers who don't use the Boostable-Tier
 resource "azurerm_postgresql_flexible_server_configuration" "pgbouncer" {
-  count     = var.database_flexible ? 1 : 0
+  count     = var.database_flexible && !startswith(var.database_host_sku, "B_") ? 1 : 0
   name      = "pgbouncer.enabled"
   value     = "true"
   server_id = azurerm_postgresql_flexible_server.server[0].id
