@@ -256,15 +256,19 @@ The following outputs are exported:
 
 ### admin\_login
 
-Description: n/a
+Description: The administrative username
 
 ### admin\_password
 
-Description: n/a
+Description: The password of the administrative user
+
+### database\_ids
+
+Description: IDs of the created databases
 
 ### databases
 
-Description: n/a
+Description: Names of the created databases
 
 ### server\_fqdn
 
