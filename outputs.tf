@@ -8,6 +8,11 @@ output "server_id" {
   value       = var.database_flexible ? azurerm_postgresql_flexible_server.server[0].id : azurerm_postgresql_server.server[0].id
 }
 
+output "server_name" {
+  description = "Name of the database server"
+  value       = var.database_flexible ? azurerm_postgresql_flexible_server.server[0].name : azurerm_postgresql_server.server[0].name
+}
+
 output "admin_login" {
   description = "The administrative username"
   value       = var.admin_login
